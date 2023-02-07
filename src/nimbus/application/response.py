@@ -163,16 +163,19 @@ class ResponseNimbus:
                 tipocolor = len(route_list["details"][0]["datetimes"])
                 if tipocolor % 2 != 0:
                     self.change_color_index(self.indice_color)
-                cant_rutinas = [{"color": self.change_color_index(self.indice_color), "sumaminrutina": 0} for _ in range(len(route_list["details"][0]["stops"][0]["hejecutada"]))]
+                cant_rutinas = [{"color": self.change_color_index(self.indice_color), "minatrasados": 0, "minadelantado" : 0} for _ in range(len(route_list["details"][0]["stops"][0]["hejecutada"]))]
                 for rutinas_p in route_list["details"][0]["stops"]:
                     contm = 0
                     for minutos in rutinas_p["min"]:
-                        diferenciatiempo = 0
-                        if minutos["time"] == "-":
-                            diferenciatiempo = 0
-                        else:
-                            diferenciatiempo = int(minutos["time"])
-                        cant_rutinas[contm]["sumaminrutina"] = cant_rutinas[contm]["sumaminrutina"] + diferenciatiempo
+                        minsatrasados = 0
+                        minsadelantados = 0
+                        minutos = minutos["time"]
+                        if len(minutos) >= 2  and minutos[0] == "-":
+                            minsatrasados = int(minutos)
+                        elif len(minutos) >= 2  and minutos[0] == "+":
+                            minsadelantados = int(minutos)
+                        cant_rutinas[contm]["minatrasados"] = cant_rutinas[contm]["minatrasados"] + minsatrasados
+                        cant_rutinas[contm]["minadelantado"] = cant_rutinas[contm]["minadelantado"] + minsadelantados
                         contm += 1
                 route_list["details"][0]["mins"] = cant_rutinas
             return routes_list
