@@ -210,7 +210,7 @@ class ResponseNimbus:
             hora_registro = datetime(ahora.year, ahora.month, ahora.day, int(horaregistro[:1]), int(horaregistro[3:4]))
             # Calcular la diferencia entre la hora actual y las 15:56
             diferencia = ahora - hora_registro
-            if diferencia.total_seconds() >= 660:
+            if diferencia.total_seconds() >= 720:
                 dataparsed = {}
                 dataparsed["route"] = rutina["ruta"]
                 dataparsed["plate"] = rutina["placa"]
