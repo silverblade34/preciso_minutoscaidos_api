@@ -109,7 +109,7 @@ class ResponseNimbus:
         return date
     
     def Order(self, dataRides, dataRutina):
-            datas = dataRides + dataRutina
+            datas = dataRutina + dataRides
             routes_list = []
             # Con la siguiente iteracion recorre toda las datas, agarra las routes y si no esta almacenada en routes_list, la almacena
             for data in datas:
