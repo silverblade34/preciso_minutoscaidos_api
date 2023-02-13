@@ -163,7 +163,7 @@ class ResponseNimbus:
                 tipocolor = len(route_list["details"][0]["datetimes"])
                 if tipocolor % 2 != 0:
                     self.change_color_index(self.indice_color)
-                cant_rutinas = [{"color": self.change_color_index(self.indice_color), "minatrasados": 0, "minadelantado" : 0} for _ in range(len(route_list["details"][0]["stops"][0]["hejecutada"]))]
+                cant_rutinas = [{"color": self.change_color_index(self.indice_color), "minatrasados": 0, "minadelantado" : 0, "sumaminutos":0} for _ in range(len(route_list["details"][0]["stops"][0]["hejecutada"]))]
                 for rutinas_p in route_list["details"][0]["stops"]:
                     contm = 0
                     for minutos in rutinas_p["min"]:
@@ -176,7 +176,9 @@ class ResponseNimbus:
                             minsadelantados = int(minutos)
                         cant_rutinas[contm]["minatrasados"] = cant_rutinas[contm]["minatrasados"] + minsatrasados
                         cant_rutinas[contm]["minadelantado"] = cant_rutinas[contm]["minadelantado"] + minsadelantados
+                        cant_rutinas[contm]["sumaminutos"] = cant_rutinas[contm]["minadelantado"] + cant_rutinas[contm]["minatrasados"]
                         contm += 1
+                    
                 route_list["details"][0]["mins"] = cant_rutinas
             return routes_list
     
@@ -190,16 +192,35 @@ class ResponseNimbus:
                 
     def responseDataMongo(self, datamongo):
         datamostrar = []
-        for rutina in datamongo:
+        sorted_list = sorted(datamongo, key=self.extract_start_time)
+        # Aquí se está utilizando la función sorted para ordenar la lista de objetos.
+        # La función sorted toma dos argumentos: la lista a ordenar y una función key que especifica el criterio de ordenamiento.
+        # En este caso, se está especificando la función extract_start_time como la función key.
+        # La función sorted llamará a extract_start_time para cada objeto en la lista y utilizará el valor devuelto para ordenar la lista.
+        # Finalmente, la lista ordenada se asigna a la variable sorted_list.
+        for rutina in sorted_list:
             rutinam = {}
             rutinam['id'] = str(rutina['_id'])
             rutinam['placa'] = rutina['placa']
             rutinam['rutina'] = rutina['rutina']
             rutinam['ruta'] = rutina['ruta']
             rutinam['fecha'] = rutina['fecha']
+            summinutosatra = 0
+            sumaminutosadela = 0
+            for parada in rutina['rutinaparadas']:
+                if parada["min"][0:1] == "-" and  len(parada["min"]) >= 2:
+                    summinutosatra += int(parada["min"])
+                elif parada["min"][0:1] == "+" and  len(parada["min"]) >= 2:
+                    sumaminutosadela += int(parada["min"])
+            rutinam['atrasadostotal'] = str(summinutosatra)
+            rutinam['adelantadostotal'] = str(sumaminutosadela)
             rutinam['rutinaparadas'] = rutina['rutinaparadas']
             datamostrar.append(rutinam)
         return datamostrar
+    def extract_start_time(self, obj):
+        # Esta función toma un objeto de la lista como argumento
+        # y devuelve la hora de inicio de la rutina.
+        return obj["rutina"].split("-")[0].strip()
 
     def parsearRutinaEstatica(self, datamongo):
         listdata = []
@@ -233,6 +254,7 @@ class ResponseNimbus:
                 dataparsed["stops"] = stops
                 listdata.append(dataparsed)
         return listdata
+    
 
 
     

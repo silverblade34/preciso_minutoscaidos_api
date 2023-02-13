@@ -8,18 +8,19 @@ class MongodRutinas:
     def __init__(self):
         self.connect = ConnectionMongo()
 
-    def rutinasConnect(self, fechaIni, fechaFin, ids, ruc):
+    def rutinasConnect(self, fechaIni, fechaFin, ruc, ruta):
         db = self.connect.con
         col = db["report_minutosc"]
         if fechaIni == 0 and fechaFin == 0:
-            id_list = []
-            for id in ids:
-                id_list.append(ObjectId(id))
-            result = list(col.find({"_id": {"$in": id_list}, "ruc" : ruc}))
-            return result
-        else:
+            if ruta != "ALL":
+                result = list(col.find({"ruc" : ruc, "ruta" : ruta}))
+                return result
+            else:
+                result = list(col.find({"ruc" : ruc}))
+                return result
+        elif ruta == "ALL":
             result = list(col.find({"fechaunix": {"$gte": fechaIni, "$lt": fechaFin}, "ruc" : ruc}))
-        return result
+            return result
     
     def consultarRuc(self, token, depot):
         db = self.connect.con

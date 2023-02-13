@@ -27,7 +27,16 @@ def listar_details_minutos():
 def mostrar_rutinas_mongo():
     try:
         _nimbusCL = NimbusController()
-        data = _nimbusCL.mostrar_rutinas_mongo(request.json['fechaIni'], request.json['fechaFin'], request.json['ids'], request.json['ruc'])
+        data = _nimbusCL.mostrar_rutinas_mongo(request.json['fechaIni'], request.json['fechaFin'], request.json['ruc'], request.json['ruta'])
+        return parsedRespond(data)
+    except Exception as err:
+        return hasErrorMsg(err)
+    
+@app.route('%s%s/%s' % (config('API_PATH'), config('API_VERSION'),  'rutas/listar'), methods=["POST"])
+def listar_rutas():
+    try:
+        _nimbusCL = NimbusController()
+        data = _nimbusCL.listarRutasEnviar(request.json['token'],request.json['depot'])  
         return parsedRespond(data)
     except Exception as err:
         return hasErrorMsg(err)

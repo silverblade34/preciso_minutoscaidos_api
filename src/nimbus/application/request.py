@@ -5,6 +5,7 @@ class RequestsData:
     def __init__(self, token, depot):
         self.headers = {"Authorization": f"Token {token}"}
         self.depot = depot
+        self.token = token 
 
     def get_rides(self):
         url = f"https://nimbus.wialon.com/api/depot/{self.depot}/rides"
@@ -81,3 +82,20 @@ class RequestsData:
         for stop in stops:
             names_per_id[stop["id"]] = stop["n"]
         return names_per_id
+    
+    def consumirRutas(self):
+        headers={
+            "Authorization":f"Token {self.token}"
+            }
+        response = requests.get(f'https://nimbus.wialon.com/api/depot/{self.depot}/routes', headers=headers)
+        raw = response.json()
+        routes = raw["routes"]
+        listrutas = []
+        for ruta in routes:
+            if ruta["a"] == True:
+                rutaobj = {}
+                rutaobj["id"] = ruta["id"]
+                rutaobj["n"] = ruta["n"]
+                listrutas.append(rutaobj)
+        return listrutas
+
