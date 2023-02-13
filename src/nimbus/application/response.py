@@ -193,12 +193,13 @@ class ResponseNimbus:
     def responseDataMongo(self, datamongo):
         datamostrar = []
         sorted_list = sorted(datamongo, key=self.extract_start_time)
+        sorted_list2 = sorted(sorted_list, key = self.compare)
         # Aquí se está utilizando la función sorted para ordenar la lista de objetos.
         # La función sorted toma dos argumentos: la lista a ordenar y una función key que especifica el criterio de ordenamiento.
         # En este caso, se está especificando la función extract_start_time como la función key.
         # La función sorted llamará a extract_start_time para cada objeto en la lista y utilizará el valor devuelto para ordenar la lista.
         # Finalmente, la lista ordenada se asigna a la variable sorted_list.
-        for rutina in sorted_list:
+        for rutina in sorted_list2:
             rutinam = {}
             rutinam['id'] = str(rutina['_id'])
             rutinam['placa'] = rutina['placa']
@@ -221,6 +222,11 @@ class ResponseNimbus:
         # Esta función toma un objeto de la lista como argumento
         # y devuelve la hora de inicio de la rutina.
         return obj["rutina"].split("-")[0].strip()
+    
+    def compare(self, obj1):
+        date1 = datetime.strptime(obj1["fecha"], "%d-%m-%Y")
+        return date1
+
 
     def parsearRutinaEstatica(self, datamongo):
         listdata = []

@@ -21,6 +21,9 @@ class MongodRutinas:
         elif ruta == "ALL":
             result = list(col.find({"fechaunix": {"$gte": fechaIni, "$lt": fechaFin}, "ruc" : ruc}))
             return result
+        else:
+            result = list(col.find({"fechaunix": {"$gte": fechaIni, "$lt": fechaFin}, "ruc" : ruc, "ruta":ruta}))
+            return result
     
     def consultarRuc(self, token, depot):
         db = self.connect.con
