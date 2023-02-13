@@ -9,4 +9,4 @@ import routes.nimbus_routes
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, port=3222)
+    app.run(host='0.0.0.0', debug=True)

@@ -6,8 +6,8 @@ from flask_cors import CORS, cross_origin
 from src.nimbus.infrastructure.controller import NimbusController
 from include.validators import parsedRespond, hasErrorMsg, checkArgs, inspectCred
 #from app import app  -> Nos sirve para gunicorn
-from __main__ import app
-#from app import app
+#from __main__ import app
+from app import app
 
 CORS(app)
 # CORS(app, resources={'%s%s/%s' % (config('API_PATH'), config('API_VERSION')): {"origins": "http://localhost"}})
