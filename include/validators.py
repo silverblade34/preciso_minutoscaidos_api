@@ -27,6 +27,14 @@ def hasErrorMsg(err):
 
     return jsonify(temp), status.HTTP_400_BAD_REQUEST
 
+def hasErrorMsgToken(err):
+    temp = {
+        'message': "El token se ha vencido",
+        'status': False
+    }
+
+    return jsonify(temp), status.HTTP_400_BAD_REQUEST
+
 def checkArgs(list, argsx):
     for item in list:
         if item in argsx:

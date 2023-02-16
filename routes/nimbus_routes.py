@@ -4,7 +4,7 @@ from flask_api import status
 from flask_cors import CORS, cross_origin
 # from src.clientes.infrastructure.controller import ClientController
 from src.nimbus.infrastructure.controller import NimbusController
-from include.validators import parsedRespond, hasErrorMsg, checkArgs, inspectCred
+from include.validators import parsedRespond, hasErrorMsg, checkArgs, inspectCred, hasErrorMsgToken
 #from app import app  -> Nos sirve para gunicorn
 #from __main__ import app
 from app import app
@@ -20,7 +20,7 @@ def listar_details_minutos():
         data = _nimbusCL.orderController(request.json['token'], request.json['depot'])  
         return parsedRespond(data)
     except Exception as err:
-        return hasErrorMsg(err)
+        return hasErrorMsgToken(err)
     
 @cross_origin                          
 @app.route('%s%s/%s' % (config('API_PATH'), config('API_VERSION'),  'mostrar_rutinas'), methods=["POST"])
