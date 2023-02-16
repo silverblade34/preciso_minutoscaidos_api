@@ -152,8 +152,6 @@ class ResponseNimbus:
                             where_to_save = stops_by_route[route_list["route"]][stop["name"]]
                             where_to_save["plannedtime"].append({"color": color_capricho,"hora": stop["plannedtime"]})
                             where_to_save["actualtime"].append({"color": color_capricho, "hora": stop["actualtime"]})
-                            if stop["differencetime"]["time"] == "0":
-                                stop["differencetime"]["time"] = "-"
                             min_dict = {"color": color_capricho, "time": stop["differencetime"]["time"], "state": stop["differencetime"]["status"]}
                             where_to_save["min"].append(min_dict)
                 for stops_of_route in stops_by_route[route_list["route"]]:
