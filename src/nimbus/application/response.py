@@ -30,41 +30,39 @@ class ResponseNimbus:
             status = ride["a"]
             if not (unidad_id is None):
                 placa = self.get_name_per_unit(unit_names, unidad_id)
-
                 if len(planned_stops) > 0 and active:
-                    ride_result = {
-                        "id": rutina_id,
-                        "plate": self.clean_plate(placa),
-                        "route": timetables[timetable_id],
-                        "date": date,
-                        "range": f"{self.datefromtimestamp(planned_stops[0])} - {self.datefromtimestamp(planned_stops[-1])}",
-                        "stops": [],
-                        "aditional": {"flag": flag, "first_stop": first_stop, "status": status}
-                    }
-                    route_stop_ids = stops_of_every_routes[timetables[timetable_id]]
+                    if timetable_id in timetables:
+                        ride_result = {
+                            "id": rutina_id,
+                            "plate": self.clean_plate(placa),
+                            "route": timetables[timetable_id],
+                            "date": date,
+                            "range": f"{self.datefromtimestamp(planned_stops[0])} - {self.datefromtimestamp(planned_stops[-1])}",
+                            "stops": [],
+                            "aditional": {"flag": flag, "first_stop": first_stop, "status": status}
+                        }
+                        route_stop_ids = stops_of_every_routes[timetables[timetable_id]]
+                        for index, stop_id in enumerate(route_stop_ids):
+                            parada = {}
+                            parada["name"] = f"{index + 1}. {stop_names_per_id[stop_id]}"
+                            # parada["status"] = "Hard_Code"
+                            parada["differencetime"] = self.get_diff_by_stop(
+                                planned_stops[index], actual_stops[index]
+                            )
+                            # ? Hora:Minuto Planificado
+                            if planned_stops[index]:
+                                # ? planned time
+                                parada["plannedtime"] = self.datefromtimestamp(planned_stops[index])
+                            else:
+                                parada["plannedtime"] = "--:--"
+                            # ? Hora:Minuto Cumplido
+                            if actual_stops[index]:
+                                # ? actual time
+                                parada["actualtime"] = self.datefromtimestamp(actual_stops[index])
+                            else:
+                                parada["actualtime"] = "--:--"
 
-                    for index, stop_id in enumerate(route_stop_ids):
-                        parada = {}
-                        parada["name"] = f"{index + 1}. {stop_names_per_id[stop_id]}"
-                        # parada["status"] = "Hard_Code"
-                        parada["differencetime"] = self.get_diff_by_stop(
-                            planned_stops[index], actual_stops[index]
-                        )
-                        # ? Hora:Minuto Planificado
-                        if planned_stops[index]:
-                            # ? planned time
-                            parada["plannedtime"] = self.datefromtimestamp(planned_stops[index])
-                        else:
-                            parada["plannedtime"] = "--:--"
-                        # ? Hora:Minuto Cumplido
-                        if actual_stops[index]:
-                            # ? actual time
-                            parada["actualtime"] = self.datefromtimestamp(actual_stops[index])
-                        else:
-                            parada["actualtime"] = "--:--"
-
-                        ride_result["stops"].append(parada)
-
+                            ride_result["stops"].append(parada)
                     whole_rides_result.append(ride_result)
         whole_rides_result = self.order_data(whole_rides_result)
         return whole_rides_result

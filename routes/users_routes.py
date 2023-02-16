@@ -16,6 +16,7 @@ def validar_usuario():
     try:
         _userCL = UserController()
         data = _userCL.validarUsuario(request.json['user'], request.json['pass'])
+        
         return parsedRespond2(data)
     except Exception as err:
         return hasErrorMsg(err)
