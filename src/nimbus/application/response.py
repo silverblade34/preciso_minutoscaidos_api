@@ -10,7 +10,8 @@ class ResponseNimbus:
 
     def responseRides(self, token, depot):
         # Inicializa las variables en el Request como constructores Header y depot
-        requestModule = RequestsData(token, depot) 
+        requestModule = RequestsData(token, depot)
+        print(requestModule)
         [timetables, stops_of_every_routes] = requestModule.get_timetables_per_routes()
         unit_names = requestModule.get_names_of_units()
         stop_names_per_id = requestModule.get_stops_names()

@@ -17,6 +17,7 @@ CORS(app)
 def listar_details_minutos():
     try:
         _nimbusCL = NimbusController()
+        print("--------------------1")
         data = _nimbusCL.orderController(request.json['token'], request.json['depot'])  
         return parsedRespond(data)
     except Exception as err:

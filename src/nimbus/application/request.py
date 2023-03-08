@@ -19,22 +19,22 @@ class RequestsData:
         url_get_sid = "https://hst-api.wialon.com/wialon/ajax.html"
         querystring_for_sid = {
             "svc": "token/login",
-            "params": '{"token":"a21e2472955b1cb0847730f34edcf3e8C8EEBF1B9AC7033BE29F381397BF2FFC63F846D7","fl":"2"}',
+            "params": '{"token":"a21e2472955b1cb0847730f34edcf3e83301C4C2D8408F8D941473C73B84C2E6996C4E27","fl":"2"}',
         }
         payload = ""
         response_from_sid = requests.request(
             "GET", url_get_sid, data=payload, params=querystring_for_sid
         )
         result_sid = response_from_sid.json()
-
         url = "https://hst-api.wialon.com/wialon/ajax.html"
         querystring = {
             "svc": "core/search_items",
             "params": '{"spec":{"itemsType":"avl_unit","propName":"sys_name","propValueMask":"*","sortType":"sys_name",          "propType":"propitemname"  },                "force":1,           "flags":1,           "from":0,           "to":0 }',
             "sid": f"{result_sid['eid']}",
-        }
+        }   
         payload = ""
         response = requests.request("GET", url, data=payload, params=querystring)
+        print(url)
         result = response.json()
         return result["items"]
 
